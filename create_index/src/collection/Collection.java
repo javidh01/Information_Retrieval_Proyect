@@ -5,7 +5,7 @@
  */
 package collection;
 
-import java.awt.EventQueue;
+
 import java.io.*;
 import java.util.*;
 
@@ -19,13 +19,11 @@ import org.xml.sax.SAXException;
  */
 public class Collection{
     
-    //static Index index;
-    static ArrayList<File> listFiles = new ArrayList<File>();
-    static ArrayList<Document> collection = new ArrayList<Document>();
-    static Document doc = new Document();
-    static Reader read = new Reader();
-    
-    static String path;
+    static Index index; //Índice
+    static ArrayList<File> listFiles = new ArrayList();
+    static ArrayList<Document> collection = new ArrayList(); //Colección de documentos
+    static Reader read = new Reader(); //Lector de documentos
+    static String path; //Ruta donde se encuentra la colección
     
     
     /** 
@@ -39,18 +37,19 @@ public class Collection{
      **/
 
     public static Boolean addFiles(File file){ 
-       /*
+       
         if(!file.exists()){
-            System.out.println(file + " no existe.");
-        } else if(file.isDirectory()){
+            //System.out.println(file + " no existe.");
+            return false;
+        }else if(file.isDirectory()){
             for(File f : file.listFiles()){
                 addFiles(f);                   
             }
         } else{
             listFiles.add(file);               
         }
-        */
         
+        /*
         if(file != null){
             for(File fileEntry : file.listFiles()){
                 if(fileEntry.isDirectory())
@@ -59,20 +58,32 @@ public class Collection{
             }
         }
         else return false;
+        */
         
         return true;
     }
     
-    public static void load(File dir) throws IOException, TikaException, SAXException{
-        Reader reader = new Reader();
-        //File dir = path;
-        addFiles(dir);
-        
-        int idFile = 0;
-        for(File file : listFiles){
-            collection.add(reader.readDoc(idFile, file));
-            idFile++;
+    /**
+     * 
+     * @param dir
+     * @return true si se ha realizado correctamente
+     *         false en caso contrario
+     * @throws IOException
+     * @throws TikaException
+     * @throws SAXException 
+     */
+    public static Boolean load(File dir) throws IOException, TikaException, SAXException{
+             
+        if(addFiles(dir)){
+            Reader reader = new Reader();
+            int idFile = 0;
+            for(File file : listFiles){
+                collection.add(reader.readDoc(idFile, file));
+                idFile++;
+            }
+            return true;
         }
+        return false;
     }
     
     /**
@@ -91,29 +102,37 @@ public class Collection{
     public static void indexation(){
         System.out.println(collection.size());
         for(Document doc : collection){
-            //index.createIndex(doc);
+            index.createIndex(doc);
             System.out.println(doc.getIdiom());
         }
     }
     
+    /**
+     * 
+     * @param lista 
+     */
     public static void printList(List<String> lista){
         for (String l : lista) {
             System.out.println(l);
         }
     }
     
+    /**
+     * 
+     */
     public static void printCol(){
         for(Document doc : collection){
             System.out.println(doc.getId());
-            ArrayList<String> d = new ArrayList(doc.getTokens());
             doc.createVoc();
-            //printList(d);
         }
     }
     
     /**
      * 
      * @param args the command line arguments
+     * @throws java.io.IOException
+     * @throws org.apache.tika.exception.TikaException
+     * @throws org.xml.sax.SAXException
      * 
      */
     public static void main(String[] args) throws IOException, TikaException, SAXException{
@@ -121,29 +140,49 @@ public class Collection{
         System.out.println("Introduzca el path de la colección\n");
 
         //Para leer los datos de entrada
-        Scanner in = new Scanner(System.in);
-        path = in.next();       
+        //Scanner in = new Scanner(System.in);
+        //path = in.next();
+        
+        path = "C:\\Users\\javi\\Desktop\\colecciones";
         
         File file = new File(path);     
         
         //Añadimos la ruta a nuestra función
-        Boolean c = addFiles(file);
         
-        System.out.println(c);
+        if(load(file)){        
+            System.out.println("Se ha cargado correctamente");        
         
-        load(file);
-         //doc = read.
-        //doc.createVoc();
-        
+            System.out.println("Tamaño de listFiles: " + listFiles.size());
+            System.out.println("Tamaño de la colección: " + collection.size());
+            
+            Reader read = new Reader();
+            
+            //Para cada documento
+            for(Document doc : collection){
+                List<String> token = doc.getTokens(); //Obtenemos los tokens del documento
+                System.out.println("Idioma: " + doc.getIdiom());
+                read.readDoc(doc.getId(),listFiles.get(doc.getId()));
+                
+                //Eliminamos palabras vacías y estemizamos cada documento
+                preprocessColl();
+                printList(token);
+                
+                
+            }        
+          
         //System.out.println("He cargado la colección");
-        preprocessColl();
-        printCol();
+        //preprocessColl();
+        //printCol();
         //System.out.println("He procesado la colección");
         
         //printCol();
         //indexation();
         //
         //System.out.println(collection.size());
+        } //End if
+        else{
+            System.err.print("\nNo se ha podido cargar la colección desde ese directorio\n");
+        }
     }
     
 } //End Class

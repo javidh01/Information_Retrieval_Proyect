@@ -9,11 +9,9 @@ package collection;
 import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.tika.language.LanguageIdentifier;
 
@@ -25,17 +23,11 @@ import org.apache.tika.language.LanguageIdentifier;
  */
 public class Document {
     private final int id;
-    static List<String> tokens = new ArrayList<String>();
+    static List<String> tokens = new ArrayList();
     private final String idiom;
-    private StringTokenizer toke;
-    static HashMap<Integer,String> vocab = new HashMap<>();
-    static HashMap<Integer,String> docs = new HashMap<>();
-    //private static final AtomicInteger count = new AtomicInteger(0);
-    
-    public Document(){
-        id = 0;
-        idiom = null;
-    }
+    private final StringTokenizer toke;
+    static HashMap<Integer,String> vocab = new HashMap();
+    static HashMap<Integer,String> docs = new HashMap();
     
     /**
      * Constructor por defecto
@@ -54,18 +46,44 @@ public class Document {
         //Eliminamos caracteres que no vamos a tokenizar
         String delim = ":;. \"|\'=(),-+/%1234567890•¿?¡!/—...»«{}[]@#©\t\n\b\r\f";
         toke = new StringTokenizer(texto.toLowerCase(),delim);
-        //String delim ="[^\\p{L}\\p{N}]";
+       
+        //Rellenamos la tabla de tokens
+        fillToken(toke);
         
-        this.tokens = new ArrayList<String>(Arrays.asList(toke.toString()));
-        //this.tokens = new ArrayList<String>(Arrays.asList(texto.replaceAll(delim," ").toLowerCase().split("\\s")));
+       
+   
     }
+    
+    /**
+     * 
+     * @param toke 
+     */
+    static private void fillToken(StringTokenizer toke){        
+       while(toke.hasMoreElements()){ 
+           String token = toke.nextToken();          
+               tokens.add(token);
+        }
+    }
+    
+     /**
+     * 
+     * Método que permite imprimir una lista pasada como argumento
+     * 
+     * @param lista 
+     */
+    public static void printList(List<String> lista){
+        for (String l : lista) {
+            System.out.println(l);
+        }
+    }
+    
     
     /**
      * Devuelve la lista de tokens
      * @return 
      */
     public List<String> getTokens(){
-        return this.tokens;
+        return Document.tokens;
     }
     
     /**

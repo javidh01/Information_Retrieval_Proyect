@@ -12,7 +12,7 @@ import java.util.*;
  * @author javi
  */
 public class Index {
-    private final Map<String, Map<Integer, Integer>> index = new LinkedHashMap<String, Map<Integer, Integer>>();
+    private final Map<String, Map<Integer, Integer>> index = new HashMap();
     
     
     /**
@@ -31,13 +31,13 @@ public class Index {
      * @return 
      */
     public List<Pair<String, Integer>> getTokens(){
-        List<Pair<String, Integer>> tokens = new ArrayList<Pair<String, Integer>>();
+        List<Pair<String, Integer>> tokens = new ArrayList();
         String key;
         
         for(Object entry : index.entrySet()){
             Map.Entry pairs = (Map.Entry) entry;
             key = pairs.getKey().toString();
-            tokens.add(new Pair<String, Integer>(key, ((Map<String, Integer>)pairs.getValue()).size()));
+            tokens.add(new Pair(key, ((Map<String, Integer>)pairs.getValue()).size()));
         }
         
         return tokens; //Devolvemos la tabla con los tokens
@@ -92,7 +92,7 @@ public class Index {
             else oc.put(docId, 1); //Si no está en ese documento
         }
         else{ //No está en el índice
-            oc = new HashMap<Integer, Integer>();
+            oc = new HashMap();
             oc.put(docId, 1);
             index.put(token, oc); //Lo añadimos al índice
         }

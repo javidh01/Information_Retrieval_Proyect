@@ -7,7 +7,7 @@ package collection;
 
 /**
  *
- * 
+ * Representa un par de tipos S y T
  * @author javi
  * @param <S>
  * @param <T>
