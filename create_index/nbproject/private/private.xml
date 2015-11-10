@@ -3,13 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/javi/Escritorio/Practica_2_2_RI/create_index/src/collection/Pair.java</file>
-            <file>file:/home/javi/Escritorio/Practica_2_2_RI/create_index/src/collection/Index.java</file>
-            <file>file:/home/javi/Escritorio/Practica_2_2_RI/create_index/src/collection/Reader.java</file>
-            <file>file:/home/javi/Escritorio/Practica_2_2_RI/create_index/src/collection/TokenProcessor.java</file>
-            <file>file:/home/javi/Escritorio/Practica_2_2_RI/create_index/src/collection/Document.java</file>
-            <file>file:/home/javi/Escritorio/Practica_2_2_RI/create_index/src/collection/Collection.java</file>
-            <file>file:/home/javi/Escritorio/Practica_2_2_RI/create_index/src/collection/Cleaner.java</file>
+            <file>file:/C:/Users/javi/Desktop/Information_Retrieval_Proyect/create_index/src/collection/Cleaner.java</file>
+            <file>file:/C:/Users/javi/Desktop/Information_Retrieval_Proyect/create_index/src/collection/Index.java</file>
+            <file>file:/C:/Users/javi/Desktop/Information_Retrieval_Proyect/create_index/src/collection/Collection.java</file>
+            <file>file:/C:/Users/javi/Desktop/Information_Retrieval_Proyect/create_index/src/collection/TokenProcessor.java</file>
+            <file>file:/C:/Users/javi/Desktop/Information_Retrieval_Proyect/create_index/src/collection/Document.java</file>
+            <file>file:/C:/Users/javi/Desktop/Information_Retrieval_Proyect/create_index/src/collection/Reader.java</file>
         </group>
     </open-files>
 </project-private>

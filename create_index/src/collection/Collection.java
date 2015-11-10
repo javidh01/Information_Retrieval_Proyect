@@ -145,11 +145,12 @@ public class Collection{
         
         path = "C:\\Users\\javi\\Desktop\\colecciones";
         
+        //Directorio donde se encuentra la colección
         File file = new File(path);     
         
         //Añadimos la ruta a nuestra función
         
-        if(load(file)){        
+        if(load(file)){ //Si se carga correctamente   
             System.out.println("Se ha cargado correctamente");        
         
             System.out.println("Tamaño de listFiles: " + listFiles.size());
@@ -160,11 +161,13 @@ public class Collection{
             //Para cada documento
             for(Document doc : collection){
                 List<String> token = doc.getTokens(); //Obtenemos los tokens del documento
-                System.out.println("Idioma: " + doc.getIdiom());
-                read.readDoc(doc.getId(),listFiles.get(doc.getId()));
+                System.out.println("Idioma: " + doc.getIdiom()); //Idioma
+                read.readDoc(doc.getId(),listFiles.get(doc.getId())); //Leemos el documento
                 
                 //Eliminamos palabras vacías y estemizamos cada documento
                 preprocessColl();
+                
+                //Imprimimos los tokens
                 printList(token);
                 
                 
