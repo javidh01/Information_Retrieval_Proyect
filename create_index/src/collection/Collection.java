@@ -19,11 +19,15 @@ import org.xml.sax.SAXException;
  */
 public class Collection{
     
-    static Index index; //Índice
+    static Index index = new Index(); //Índice
     static ArrayList<File> listFiles = new ArrayList();
     static ArrayList<Document> collection = new ArrayList(); //Colección de documentos
     static Reader read = new Reader(); //Lector de documentos
     static String path; //Ruta donde se encuentra la colección
+    static HashMap<String,Integer> vocab = new HashMap<>();
+    static HashMap<Integer,String> docum = new HashMap<>();
+    static HashMap<Integer,Double> idf = new HashMap<>();
+    static HashMap<Integer,Double> normaDoc = new HashMap<>();
     
     
     /** 
@@ -76,10 +80,11 @@ public class Collection{
              
         if(addFiles(dir)){
             Reader reader = new Reader();
-            int idFile = 0;
+            int idFile = 1;
             for(File file : listFiles){
-                collection.add(reader.readDoc(idFile, file));
+                collection.add(reader.parserDoc(idFile, file));
                 idFile++;
+                
             }
             return true;
         }
@@ -90,21 +95,57 @@ public class Collection{
      * 
      */
     public static void preprocessColl(){
+        
         for(Document doc : collection){
             TokenProcessor.removeStopWords(doc);
             TokenProcessor.stemDocument(doc);
+        
         }
+        
+        
+
+
+    }
+    
+    
+     public static void createVoc(){
+        Iterator it = collection.iterator();
+            //System.out.println( col.get(docId-1).getFrec());
+        
+        int idTer = 1;
+        while(it.hasNext()){
+            Document doc = (Document) it.next();
+            
+            List<String> a = doc.getTokens();
+            
+            for ( String b : a ){
+                if ( !vocab.containsValue(b) ){
+                    vocab.put( b, idTer);
+               System.out.println( idTer + " " + b);
+                }
+                ++idTer;
+            }
+        
+       } 
+    }
+    
+    public static void createDoc(){
+        
     }
     
     /**
      * 
      */
-    public static void indexation(){
-        System.out.println(collection.size());
+    public static void indexation(  ){
+        
+        
+       
+        
         for(Document doc : collection){
-            index.createIndex(doc);
-            System.out.println(doc.getIdiom());
+            doc.fillFrec();
+            index.createIndex(doc, collection,vocab);
         }
+        
     }
     
     /**
@@ -120,12 +161,9 @@ public class Collection{
     /**
      * 
      */
-    public static void printCol(){
-        for(Document doc : collection){
-            System.out.println(doc.getId());
-            doc.createVoc();
-        }
-    }
+ 
+    
+     
     
     /**
      * 
@@ -156,6 +194,8 @@ public class Collection{
             System.out.println("Tamaño de listFiles: " + listFiles.size());
             System.out.println("Tamaño de la colección: " + collection.size());
             
+            
+            /*
             Reader read = new Reader();
             
             //Para cada documento
@@ -169,10 +209,24 @@ public class Collection{
                 
                 //Imprimimos los tokens
                 printList(token);
-                
-                
-            }        
-          
+            }
+            */
+            
+            
+             //Eliminamos palabras vacías y estemizamos cada documento
+            preprocessColl();
+            
+            
+            createVoc();
+            
+            
+            indexation();
+            
+            //System.out.println( collection.get(0).getFrec() );
+            //System.out.println( collection.get(1).getFrec() );
+            //System.out.println(index.getTokens().toString());
+            index.printIndex();
+            //System.out.println(index.getNumberDoc("el"));
         //System.out.println("He cargado la colección");
         //preprocessColl();
         //printCol();

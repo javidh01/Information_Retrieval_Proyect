@@ -21,11 +21,10 @@ import org.xml.sax.SAXException;
  */
 public class Reader {
     
-    public Document readDoc(int id, File file) throws IOException, TikaException, SAXException{
-        return new Document(id, parserDoc(file));
-    }
     
-    public String parserDoc(File file) throws IOException, TikaException, SAXException{
+    
+    public Document parserDoc(int id, File file) throws IOException, TikaException, SAXException{
+        
         
         //Leemos el documento
         InputStream input = null;
@@ -47,6 +46,8 @@ public class Reader {
          }
          catch (IOException e){}
          
-         return ch.toString(); //Devolvemos un string con los tokens;
+        Document doc = new Document(id,ch.toString());
+        
+         return doc; //Devolvemos un string con los tokens;
     }
 }

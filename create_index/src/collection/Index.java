@@ -5,6 +5,7 @@
  */
 package collection;
 
+
 import java.util.*;
 
 /**
@@ -12,16 +13,18 @@ import java.util.*;
  * @author javi
  */
 public class Index {
-    private final Map<String, Map<Integer, Integer>> index = new HashMap();
+    private final Map<Integer, Map<Integer, Integer>> index = new HashMap();
     
     
     /**
      * Crea el índice a partir de un documento
      * @param doc 
      */
-    public void createIndex(Document doc){
-        for(String token : doc.getTokens()){
-            indexToken(doc.getId(), token);
+    public void createIndex(Document doc, ArrayList<Document> col){
+        //System.out.println("Entro createIndex()");
+        List<String> tokens = doc.getTokens();
+        for(String token : tokens ){
+            indexToken(doc.getId(), token, col);
         }
     }
     
@@ -40,7 +43,7 @@ public class Index {
             tokens.add(new Pair(key, ((Map<String, Integer>)pairs.getValue()).size()));
         }
         
-        return tokens; //Devolvemos la tabla con los tokens
+        return tokens; //Devolvemos la lista con los tokens
     }
     
     
@@ -82,9 +85,52 @@ public class Index {
         return n_oc;
     }
     
-    private void indexToken(int docId, String token){
-        Map<Integer, Integer> oc = index.get(token); //Número de ocurrencias del token
+    
+    
+    /**
+     * 
+     * @param docId
+     * @param token 
+     */
+    private void indexToken(int docId, String token, ArrayList<Document> col){
         
+
+        int currenFreq = -1;
+        //System.out.println(docId);
+        Map<Integer, Integer> oc = new HashMap<>(); //Número de ocurrencias del token
+        
+        //if(oc != null){
+            HashMap<String, Integer> aux = col.get(docId-1).getFrec();
+            Iterator it = aux.entrySet().iterator();
+            //System.out.println( col.get(docId-1).getFrec());
+            while(it.hasNext()){
+                Map.Entry e = (Map.Entry)it.next();
+                
+                if(e.getKey() == token){
+                  // System.out.println(e.getKey() + " == " + token);
+                    currenFreq = (int) e.getValue();
+                    oc.put(docId,currenFreq);
+                    
+                    
+                }
+            }    
+        //}
+        if ( currenFreq != -1  ){
+           //int indice = 
+           if ( !index.containsKey(token) )
+               index.put(indice, oc); //Lo añadimos al índice
+        
+        
+        else 
+            index.get(indice).put(docId, currenFreq);
+
+        }
+    //if( oc != null )
+        //System.out.println("token: " + token + oc.toString());
+        
+        
+        
+        /*
         if(oc != null){ //Si el token está en el índice
             Integer currentFreq = oc.get(docId);
             if(currentFreq != null) //Y está en el mismo documento
@@ -94,7 +140,21 @@ public class Index {
         else{ //No está en el índice
             oc = new HashMap();
             oc.put(docId, 1);
-            index.put(token, oc); //Lo añadimos al índice
+            
         }
+                */
+        
     }
-} //End class
+    
+    public void printIndex(){
+        //System.out.println(index.toString());
+        
+        
+        for (Map.Entry e : index.entrySet()) { 
+            HashMap a = (HashMap) e.getValue();
+            //if(it != null)
+            System.out.println(e.getKey() + " --> " + e.getValue().toString());
+        }
+       
+    }
+} //End clas

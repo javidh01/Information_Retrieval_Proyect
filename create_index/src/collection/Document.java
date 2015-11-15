@@ -23,11 +23,12 @@ import org.apache.tika.language.LanguageIdentifier;
  */
 public class Document {
     private final int id;
-    static List<String> tokens = new ArrayList();
+    private List<String> tokens = new ArrayList();
     private final String idiom;
-    private final StringTokenizer toke;
-    static HashMap<Integer,String> vocab = new HashMap();
-    static HashMap<Integer,String> docs = new HashMap();
+    private final  StringTokenizer toke;
+     HashMap<String, Integer> listfrec = new HashMap();
+     HashMap<Integer,String> vocab = new HashMap();
+     HashMap<Integer,String> docs = new HashMap();
     
     /**
      * Constructor por defecto
@@ -48,21 +49,41 @@ public class Document {
         toke = new StringTokenizer(texto.toLowerCase(),delim);
        
         //Rellenamos la tabla de tokens
-        fillToken(toke);
-        
-       
-   
+        fillToken();
     }
     
     /**
      * 
      * @param toke 
      */
-    static private void fillToken(StringTokenizer toke){        
+    
+    public void fillToken(){        
        while(toke.hasMoreElements()){ 
-           String token = toke.nextToken();          
-               tokens.add(token);
+           String token = toke.nextToken();
+           tokens.add(token);
         }
+    }
+    
+     public void fillFrec(){        
+         
+         Iterator it = tokens.iterator();
+       while(it.hasNext()){ 
+           String token = (String) it.next();
+            if( !listfrec.containsKey(token)){
+               listfrec.put(token,1);
+           }
+           else{               
+               listfrec.put(token,(int)listfrec.get(token)+1);
+           }
+        }
+    }
+    
+    /**
+     * 
+     * @return HashMap<String,Integer>
+     */
+    public HashMap<String,Integer> getFrec(){
+        return listfrec;
     }
     
      /**
@@ -71,7 +92,7 @@ public class Document {
      * 
      * @param lista 
      */
-    public static void printList(List<String> lista){
+    public  void printList(List<String> lista){
         for (String l : lista) {
             System.out.println(l);
         }
@@ -83,7 +104,8 @@ public class Document {
      * @return 
      */
     public List<String> getTokens(){
-        return Document.tokens;
+        
+        return tokens;
     }
     
     /**
@@ -102,22 +124,5 @@ public class Document {
         return this.idiom;
     }
     
-    public void createVoc(){
-        Iterator it = tokens.iterator();
-        int idTer = 1;
-        while(it.hasNext()){
-            vocab.put(idTer, (String) it.next().toString());
-            System.out.println(idTer + " - " + vocab.get(idTer));
-            idTer++;
-        }
-    }
-    
-    public void createDoc(ArrayList<File> listFiles){
-        Iterator it = listFiles.iterator();
-        int idDoc = 1;
-        while(it.hasNext()){
-            docs.put(idDoc, (String) it.next());
-            idDoc++;
-        }
-    }
+   
 } //End Class
